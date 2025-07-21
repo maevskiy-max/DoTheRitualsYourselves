@@ -13,16 +13,24 @@ namespace DoTheRitualsYourselves.Windows
     public class MainTabWindow_AutoRituals : MainTabWindow
     {
         private Ideo selectedIdeo;
-
         private Ideo DefaultIdeo => Faction.OfPlayer.ideos?.PrimaryIdeo ?? Find.IdeoManager.IdeosListForReading.FirstOrDefault();
+
+        private const float spacing = 6f;
+        private const float lineHeight = 28f;
+        private const float labelBetween = 12f;
+        private const float nameWidth = 350f;
+        private const float spaceBetween = 5f;
+        private const float longSpace = 180f;
+        private const float shortSpace = 100f;
 
         public override Vector2 InitialSize
         {
             get
             {
                 int ritualCount = (selectedIdeo ?? DefaultIdeo).GetRituals().Count();
-                float height = 80f + ritualCount * 34f + 40f;
-                return new Vector2(1000f, height);
+                return new Vector2(
+                    spacing * 2 + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace * 2 + 45f,
+                    (ritualCount + 2) * (lineHeight + spaceBetween) + labelBetween + spacing + 15f);
             }
         }
 
@@ -39,14 +47,12 @@ namespace DoTheRitualsYourselves.Windows
 
         public override void DoWindowContents(Rect inRect)
         {
-            const float lineHeight = 28f;
-            const float spacing = 6f;
-            const float nameWidth = 350f;
-
-            Text.Font = GameFont.Small;
             float curY = inRect.y + spacing;
 
-            if (Widgets.ButtonText(new Rect(inRect.x + spacing, curY, nameWidth, lineHeight), selectedIdeo.name))
+            Text.Font = GameFont.Small;
+            var rectIdeo = new Rect(inRect.x + spacing, curY, nameWidth, lineHeight);
+            TooltipHandler.TipRegion(rectIdeo, "DoTheRitualsYourselves.UI.Ideo.Tip".Translate());
+            if (Widgets.ButtonText(rectIdeo, selectedIdeo.name))
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
                 foreach (Ideo ideo in Find.IdeoManager.IdeosListForReading)
@@ -57,37 +63,42 @@ namespace DoTheRitualsYourselves.Windows
 
             TextAnchor prevAnchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(new Rect(inRect.x + nameWidth + 10f, curY, 100f, lineHeight), "DoTheRitualsYourselves.UI.StartNow".Translate());
-            TooltipHandler.TipRegion(new Rect(inRect.x + nameWidth + 10f, curY, 100f, lineHeight), "DoTheRitualsYourselves.UI.StartNow.Tip".Translate());
-            Widgets.Label(new Rect(inRect.x + nameWidth + 120f, curY, 100f, lineHeight), "DoTheRitualsYourselves.UI.AutoStart".Translate());
-            TooltipHandler.TipRegion(new Rect(inRect.x + nameWidth + 120f, curY, 100f, lineHeight), "DoTheRitualsYourselves.UI.AutoStart.Tip".Translate());
-            Widgets.Label(new Rect(inRect.x + nameWidth + 240f, curY, 150f, lineHeight), "DoTheRitualsYourselves.UI.RitualPolicy".Translate());
-            TooltipHandler.TipRegion(new Rect(inRect.x + nameWidth + 240f, curY, 100f, lineHeight), "DoTheRitualsYourselves.UI.RitualPolicy.Tip".Translate());
-            Widgets.Label(new Rect(inRect.x + nameWidth + 400f, curY, 200f, lineHeight), "DoTheRitualsYourselves.UI.RitualSpot".Translate());
-            TooltipHandler.TipRegion(new Rect(inRect.x + nameWidth + 400f, curY, 200f, lineHeight), "DoTheRitualsYourselves.UI.RitualSpot.Tip".Translate());
+
+            var rectLabelStartNow = new Rect(inRect.x + spacing + nameWidth + spaceBetween, curY, shortSpace, lineHeight);
+            var rectLabelAutoStart = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 2 + shortSpace, curY, shortSpace, lineHeight);
+            var rectLabelPolicy = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 3 + shortSpace * 2, curY, longSpace, lineHeight);
+            var rectLabelSpot = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace, curY, longSpace, lineHeight);
+
+            Widgets.Label(rectLabelStartNow, "DoTheRitualsYourselves.UI.StartNow".Translate());
+            TooltipHandler.TipRegion(rectLabelStartNow, "DoTheRitualsYourselves.UI.StartNow.Tip".Translate());
+            Widgets.Label(rectLabelAutoStart, "DoTheRitualsYourselves.UI.AutoStart".Translate());
+            TooltipHandler.TipRegion(rectLabelAutoStart, "DoTheRitualsYourselves.UI.AutoStart.Tip".Translate());
+            Widgets.Label(rectLabelPolicy, "DoTheRitualsYourselves.UI.RitualPolicy".Translate());
+            TooltipHandler.TipRegion(rectLabelPolicy, "DoTheRitualsYourselves.UI.RitualPolicy.Tip".Translate());
+            Widgets.Label(rectLabelSpot, "DoTheRitualsYourselves.UI.RitualSpot".Translate());
+            TooltipHandler.TipRegion(rectLabelSpot, "DoTheRitualsYourselves.UI.RitualSpot.Tip".Translate());
             Text.Anchor = prevAnchor;
 
-            curY += lineHeight + spacing * 2f;
+            curY += lineHeight + labelBetween;
             windowRect.y += windowRect.height - InitialSize.y;
             windowRect.height = InitialSize.y;
             foreach (Precept_Ritual ritual in selectedIdeo.GetRituals())
             {
-                Widgets.Label(new Rect(inRect.x + 20f, curY, nameWidth, lineHeight), new GUIContent($"{ritual.LabelCap} ({ritual.def.label})", ritual.Icon));
-
+                Widgets.Label(new Rect(inRect.x + 20f, curY, nameWidth, lineHeight), new GUIContent($"{ritual.LabelCap} ({(ritual.ShortDescOverrideCap.NullOrEmpty() ? ritual.def.label : ritual.ShortDescOverrideCap)})", ritual.Icon));
                 RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
 
                 // start now
                 string reason = "";
-                Rect rect = new Rect(inRect.x + nameWidth + 10f, curY, 100f, lineHeight);
+                Rect startNowRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween, curY, shortSpace, lineHeight);
                 if (!ritual.TryStart(ref reason, true, true))
                 {
-                    if (Widgets.ButtonText(rect, "DoTheRitualsYourselves.UI.CannotStart".Translate()))
+                    if (Widgets.ButtonText(startNowRect, "DoTheRitualsYourselves.UI.CannotStart".Translate()))
                         Messages.Message("DoTheRitualsYourselves.Message.CantStart".Translate(), MessageTypeDefOf.RejectInput);
-                    TooltipHandler.TipRegion(rect, reason != "" ? reason : "DoTheRitualsYourselves.Reason.CantUnknown".Translate().RawText);
+                    TooltipHandler.TipRegion(startNowRect, reason != "" ? reason : "DoTheRitualsYourselves.Reason.CantUnknown".Translate().RawText);
                 }
                 else
                 {
-                    if (Widgets.ButtonText(rect, "DoTheRitualsYourselves.UI.Start".Translate()))
+                    if (Widgets.ButtonText(startNowRect, "DoTheRitualsYourselves.UI.Start".Translate()))
                     {
                         string reason2 = "";
                         ritual.TryStart(ref reason2, true, false);
@@ -97,18 +108,18 @@ namespace DoTheRitualsYourselves.Windows
                     }
 
                     if (ritual.RepeatPenaltyActive)
-                        TooltipHandler.TipRegion(rect, "DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip".Translate());
+                        TooltipHandler.TipRegion(startNowRect, "DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip".Translate());
                     else
-                        TooltipHandler.TipRegion(rect, "DoTheRitualsYourselves.UI.StartTooltip".Translate());
+                        TooltipHandler.TipRegion(startNowRect, "DoTheRitualsYourselves.UI.StartTooltip".Translate());
                 }
 
                 // auto start
                 bool auto = extra.autoStart;
-                Widgets.Checkbox(new Vector2(inRect.x + nameWidth + 160f, curY + 5f), ref auto);
+                Widgets.Checkbox(new Vector2(inRect.x + spacing + nameWidth + spaceBetween * 2 + shortSpace * 1.5f - 12f, curY), ref auto);
                 extra.autoStart = auto;
 
                 // policy
-                Rect policyRect = new Rect(inRect.x + nameWidth + 240f, curY, 150f, lineHeight);
+                Rect policyRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 3 + shortSpace * 2, curY, longSpace, lineHeight);
                 var currentPolicy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
                 if (Widgets.ButtonText(policyRect, currentPolicy.Label))
                 {
@@ -130,7 +141,7 @@ namespace DoTheRitualsYourselves.Windows
                 }
 
                 // spot
-                Rect splotRect = new Rect(inRect.x + nameWidth + 400f, curY, 200f, lineHeight);
+                Rect spotRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace, curY, longSpace, lineHeight);
                 Thing ritualSpot = extra.ritualSpot;
                 if (ritualSpot != null && !ritualSpot.Spawned)
                 {
@@ -140,7 +151,7 @@ namespace DoTheRitualsYourselves.Windows
 
                 if (ritualSpot == null)
                 {
-                    if (Widgets.ButtonText(splotRect, "DoTheRitualsYourselves.UI.RitualSpot.None".Translate()))
+                    if (Widgets.ButtonText(spotRect, "DoTheRitualsYourselves.UI.RitualSpot.None".Translate()))
                     {
                         List<FloatMenuOption> options = new List<FloatMenuOption>
                         {
@@ -151,8 +162,8 @@ namespace DoTheRitualsYourselves.Windows
                 }
                 else
                 {
-                    TooltipHandler.TipRegion(splotRect, ritualSpot.LabelNoParenthesis);
-                    if (Widgets.ButtonText(splotRect, ritualSpot.LabelNoParenthesis))
+                    TooltipHandler.TipRegion(spotRect, ritualSpot.LabelNoParenthesis);
+                    if (Widgets.ButtonText(spotRect, ritualSpot.LabelNoParenthesis))
                     {
                         List<FloatMenuOption> options = new List<FloatMenuOption>
                         {
@@ -164,7 +175,7 @@ namespace DoTheRitualsYourselves.Windows
                     }
                 }
 
-                curY += lineHeight + spacing;
+                curY += lineHeight + spaceBetween;
             }
         }
 
@@ -173,10 +184,24 @@ namespace DoTheRitualsYourselves.Windows
             var targetingParams = new TargetingParameters
             {
                 canTargetBuildings = true,
-                validator = t => t.Thing is Building 
-                && t.Thing.def.building.buildingTags.Contains("RitualFocus")
-                && t.Thing.Faction == Faction.OfPlayer
-                && ritual.CanUseTarget(t, null).canUse
+                validator = t => {
+                    if (!(t.Thing is Building) || !t.Thing.def.IsRitualBuilding() || t.Thing.Faction != Faction.OfPlayer)
+                        return false;
+
+                    if (!ritual.activeObligations.NullOrEmpty())
+                        foreach (RitualObligation activeObligation in ritual.activeObligations)
+                            if (ritual.CanUseTarget(t.Thing, activeObligation).canUse)
+                                return true; 
+
+                    try
+                    {
+                        return ritual.CanUseTarget(t, null).canUse;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
             };
 
             Find.Targeter.BeginTargeting(targetingParams, 
@@ -195,7 +220,10 @@ namespace DoTheRitualsYourselves.Windows
         {
             Thing thing = extra.ritualSpot;
             if (thing != null)
+            {
                 CameraJumper.TryJumpAndSelect(thing);
+                Find.MainTabsRoot.EscapeCurrentTab();
+            }
         }
     }
 }

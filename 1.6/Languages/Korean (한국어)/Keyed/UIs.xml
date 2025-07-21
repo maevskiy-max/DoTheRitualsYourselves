@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+    <DoTheRitualsYourselves.UI.Ideo.Tip>특정 종교의 행사를 설정합니다. 정착지에 존재하는 행사만 표시됩니다.</DoTheRitualsYourselves.UI.Ideo.Tip>
     <DoTheRitualsYourselves.UI.StartNow>즉시 시작</DoTheRitualsYourselves.UI.StartNow>
     <DoTheRitualsYourselves.UI.StartNow.Tip>행사를 즉시 시작합니다. 참가자 조건을 제외한 행사 정책을 무시합니다.</DoTheRitualsYourselves.UI.StartNow.Tip>
     <DoTheRitualsYourselves.UI.AutoStart>자동 시작</DoTheRitualsYourselves.UI.AutoStart>
@@ -14,7 +15,7 @@
     <DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip>이미 얼마 전에 행사를 진행하여 품질이 낮을 수 있습니다.</DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip>
     <DoTheRitualsYourselves.UI.Edit>수정...</DoTheRitualsYourselves.UI.Edit>
 
-    <DoTheRitualsYourselves.UI.RitualSpot.None>없음</DoTheRitualsYourselves.UI.RitualSpot.None>
+    <DoTheRitualsYourselves.UI.RitualSpot.None>자동</DoTheRitualsYourselves.UI.RitualSpot.None>
     <DoTheRitualsYourselves.UI.RitualSpot.Reassign>재지정</DoTheRitualsYourselves.UI.RitualSpot.Reassign>
     <DoTheRitualsYourselves.UI.RitualSpot.Assign>지정</DoTheRitualsYourselves.UI.RitualSpot.Assign>
     <DoTheRitualsYourselves.UI.RitualSpot.Clear>초기화</DoTheRitualsYourselves.UI.RitualSpot.Clear>
@@ -26,6 +27,8 @@
     <DoTheRitualsYourselves.UI.Policy.Desc>행사가 자동으로 시작될 규칙과 행사에 참여할 수 있는 인원의 조건을 생성하고 관리합니다.</DoTheRitualsYourselves.UI.Policy.Desc>
     <DoTheRitualsYourselves.UI.Policy.MinPawnCount>최소 참여 인원</DoTheRitualsYourselves.UI.Policy.MinPawnCount>
     <DoTheRitualsYourselves.UI.Policy.MinPawnCount.Tip>행사가 시작하기 위한 최소 참여 인원을 설정합니다.</DoTheRitualsYourselves.UI.Policy.MinPawnCount.Tip>
+    <DoTheRitualsYourselves.UI.Policy.MaxNonRoleCount>최대 비역할</DoTheRitualsYourselves.UI.Policy.MaxNonRoleCount>
+    <DoTheRitualsYourselves.UI.Policy.MaxNonRoleCount.Tip>역할이 없는 참여자의 최대 인원수를 제한합니다.</DoTheRitualsYourselves.UI.Policy.MaxNonRoleCount.Tip>
     <DoTheRitualsYourselves.UI.Policy.AvgMood>평균 기분</DoTheRitualsYourselves.UI.Policy.AvgMood>
     <DoTheRitualsYourselves.UI.Policy.AvgMood.Tip>행사가 시작하기 위한 참여 인원의 평균 기분을 설정합니다.</DoTheRitualsYourselves.UI.Policy.AvgMood.Tip>
     <DoTheRitualsYourselves.UI.Policy.Time>시간</DoTheRitualsYourselves.UI.Policy.Time>
@@ -38,6 +41,14 @@
     <DoTheRitualsYourselves.UI.Policy.PawnMood.Tip>행사에 참여할 수 있는 참여자의 기분을 설정합니다.</DoTheRitualsYourselves.UI.Policy.PawnMood.Tip>
     <DoTheRitualsYourselves.UI.Policy.ExceptRestring>휴식 제외</DoTheRitualsYourselves.UI.Policy.ExceptRestring>
     <DoTheRitualsYourselves.UI.Policy.ExceptRestring.Tip>활성화하면 휴식하는 사람을 행사에서 제외시킵니다.</DoTheRitualsYourselves.UI.Policy.ExceptRestring.Tip>
+    <DoTheRitualsYourselves.UI.Policy.RespectAllowedArea>허가 구역</DoTheRitualsYourselves.UI.Policy.RespectAllowedArea>
+    <DoTheRitualsYourselves.UI.Policy.RespectAllowedArea.Tip>활성화하면 허가 구역에 행사 장소가 포함된 사람만 참여할 수 있습니다.</DoTheRitualsYourselves.UI.Policy.RespectAllowedArea.Tip>
+    <DoTheRitualsYourselves.UI.Policy.AllowColonist>정착민</DoTheRitualsYourselves.UI.Policy.AllowColonist>
+    <DoTheRitualsYourselves.UI.Policy.AllowColonist.Tip>활성화하면 정착민이 행사에 참여할 수 있습니다.</DoTheRitualsYourselves.UI.Policy.AllowColonist.Tip>
+    <DoTheRitualsYourselves.UI.Policy.AllowSlave>노예</DoTheRitualsYourselves.UI.Policy.AllowSlave>
+    <DoTheRitualsYourselves.UI.Policy.AllowSlave.Tip>활성화하면 노예가 행사에 참여할 수 있습니다.</DoTheRitualsYourselves.UI.Policy.AllowSlave.Tip>
+    <DoTheRitualsYourselves.UI.Policy.AllowOtherIdeo>다른 사상</DoTheRitualsYourselves.UI.Policy.AllowOtherIdeo>
+    <DoTheRitualsYourselves.UI.Policy.AllowOtherIdeo.Tip>활성화하면 다른 사상도 행사에 참여할 수 있습니다.</DoTheRitualsYourselves.UI.Policy.AllowOtherIdeo.Tip>
 
     <DoTheRitualsYourselves.NewPolicy>새 행사 정책</DoTheRitualsYourselves.NewPolicy>
 

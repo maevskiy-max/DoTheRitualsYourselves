@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
-using Verse.Noise;
 
 namespace DoTheRitualsYourselves.Core
 {
@@ -63,11 +62,11 @@ namespace DoTheRitualsYourselves.Core
 
             if (ritual.isAnytime)
             {
-                RitualTargetUseReport ritualTargetUseReport = ritual.CanUseTarget(thing, null);
-                if (ritualTargetUseReport.failReason.NullOrEmpty())
-                    return true;
-                else
-                    reason = ritualTargetUseReport.failReason;
+                var ritualTargetUseReport = ritual.CanUseTarget(thing, null);
+                if (!ritualTargetUseReport.canUse)
+                    return false;
+                reason = ritualTargetUseReport.failReason;
+                return true;
             }
 
             RitualObligationTrigger ritualObligationTrigger = ritual.obligationTriggers?.FirstOrDefault((RitualObligationTrigger o) => o is RitualObligationTrigger_Date);
@@ -93,11 +92,17 @@ namespace DoTheRitualsYourselves.Core
 
             Dialog_BeginRitual.PawnFilter filter = delegate (Pawn pawn, bool voluntary, bool allowOtherIdeos)
             {
-                return policy.IsCanJoin(ritual, pawn, voluntary, allowOtherIdeos);
+                return policy.IsCanJoin(ritual, thing, pawn, voluntary, allowOtherIdeos);
             };
 
             RitualRoleAssignments ritualRoleAssignments = Dialog_BeginRitual.CreateRitualRoleAssignments(ritual, targetInfo, thing.Map, filter, null, null, null);
             ritualRoleAssignments.FillPawns(filter, targetInfo);
+
+            while (ritualRoleAssignments.SpectatorsForReading.Count > policy.maxNonRoleCount)
+            {
+                Pawn pawn = ritualRoleAssignments.SpectatorsForReading.RandomElement();
+                ritualRoleAssignments.SpectatorsForReading.Remove(pawn);
+            }
 
             if (!ritualRoleAssignments.Participants.Any())
             {
@@ -221,7 +226,7 @@ namespace DoTheRitualsYourselves.Core
             }
 
             RitualPolicy policy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
-            if (!map.mapPawns.AllHumanlike.Any(pawn => policy.IsCanJoin(ritual, pawn)))
+            if (!map.mapPawns.FreeColonistsAndPrisonersSpawned.Any(pawn => policy.IsCanJoin(ritual, null, pawn)))
             {
                 reason = "DoTheRitualsYourselves.Reason.Nobody".Translate();
                 return false;
@@ -236,27 +241,19 @@ namespace DoTheRitualsYourselves.Core
 
             RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
             Thing ritualSpot = extra.ritualSpot;
-            if (ritualSpot != null)
+            if (!simulated && ritualSpot != null)
             {
                 if (!ritualSpot.Spawned)
-                {
                     extra.ritualSpot = null;
-                }
                 else if (ritualSpot.Map == map)
                 {
                     RitualObligation ritualObligation = null;
                     if (CanStartWithObligations(ritual, ritualSpot, ref ritualObligation, ref reason2))
                     {
-                        if (simulated)
-                            return true;
-
                         if (CanStartWithPawns(ritual, ritualSpot, ritualObligation, ref reason3, ref callback, ref quality))
                         {
-                            if (callback != null)
-                            {
-                                callback();
-                                return true;
-                            }
+                            callback();
+                            return true;
                         }
                     }
                 }

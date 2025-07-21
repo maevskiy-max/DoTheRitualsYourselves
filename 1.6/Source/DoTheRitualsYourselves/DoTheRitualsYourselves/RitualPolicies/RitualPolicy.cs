@@ -10,6 +10,7 @@ namespace DoTheRitualsYourselves.RitualPolicies
         public string label = "";
 
         public int minPawnCount = 1;
+        public int maxNonRoleCount = 50;
         public FloatRange avgMood = new FloatRange(0f, 1f);
         public IntRange time = new IntRange(0, 24);
         public bool invertTime = false;
@@ -17,6 +18,11 @@ namespace DoTheRitualsYourselves.RitualPolicies
         public FloatRange pawnHealth = new FloatRange(0f, 1f);
         public FloatRange pawnMood = new FloatRange(0f, 1f);
         public bool exceptResting = false;
+
+        public bool respectAllowedArea = true;
+        public bool allowColonist = true;
+        public bool allowSlave = true;
+        public bool allowOtherIdeo = true;
 
         public abstract string Label { get; }
         public abstract bool IsConst { get; }
@@ -37,14 +43,21 @@ namespace DoTheRitualsYourselves.RitualPolicies
 
         public RitualPolicy(
             int minPawnCount,
+            int maxNonRoleCount,
             FloatRange avgMood,
             IntRange time,
             bool invertTime,
             FloatRange pawnHealth,
             FloatRange pawnMood,
-            bool exceptResting)
+            bool exceptResting,
+            bool respectAllowedArea,
+            bool allowColonist,
+            bool allowSlave,
+            bool allowOtherIdeo
+            )
         {
             this.minPawnCount = minPawnCount;
+            this.maxNonRoleCount = maxNonRoleCount;
             this.avgMood = avgMood;
             this.time = time;
             this.invertTime = invertTime;
@@ -52,12 +65,18 @@ namespace DoTheRitualsYourselves.RitualPolicies
             this.pawnHealth = pawnHealth;
             this.pawnMood = pawnMood;
             this.exceptResting = exceptResting;
+
+            this.respectAllowedArea = respectAllowedArea;
+            this.allowColonist = allowColonist;
+            this.allowSlave = allowSlave;
+            this.allowOtherIdeo = allowOtherIdeo;
         }
 
         public void ExposeData()
         {
             Scribe_Values.Look(ref label, "DoTheRitualsYourselves.Label", "policy");
             Scribe_Values.Look(ref minPawnCount, "DoTheRitualsYourselves.MinPawnCount", 1);
+            Scribe_Values.Look(ref maxNonRoleCount, "DoTheRitualsYourselves.maxNonRoleCount", 50);
             Scribe_Values.Look(ref avgMood.min, "DoTheRitualsYourselves.AvgMoodMin", 0f);
             Scribe_Values.Look(ref avgMood.max, "DoTheRitualsYourselves.AvgMoodMax", 1f);
             Scribe_Values.Look(ref time.min, "DoTheRitualsYourselves.TimeMin", 0);
@@ -68,9 +87,13 @@ namespace DoTheRitualsYourselves.RitualPolicies
             Scribe_Values.Look(ref pawnMood.min, "DoTheRitualsYourselves.PawnMoodMin", 0f);
             Scribe_Values.Look(ref pawnMood.max, "DoTheRitualsYourselves.PawnMoodMax", 0f);
             Scribe_Values.Look(ref exceptResting, "DoTheRitualsYourselves.ExceptResting", false);
+            Scribe_Values.Look(ref respectAllowedArea, "DoTheRitualsYourselves.RespectAllowedArea", true);
+            Scribe_Values.Look(ref allowColonist, "DoTheRitualsYourselves.AllowColonist", true);
+            Scribe_Values.Look(ref allowSlave, "DoTheRitualsYourselves.AllowSlave", true);
+            Scribe_Values.Look(ref allowOtherIdeo, "DoTheRitualsYourselves.AllowOtherIdeo", true);
         }
 
-        public virtual bool IsCanJoin(Precept_Ritual ritual, Pawn pawn, bool voluntary = false, bool allowOtherIdeos = false)
+        public virtual bool IsCanJoin(Precept_Ritual ritual, Thing spot, Pawn pawn, bool voluntary = true, bool allowOtherIdeos = true)
         {
             if (pawn.GetLord() != null)
                 return false;
@@ -87,6 +110,16 @@ namespace DoTheRitualsYourselves.RitualPolicies
             if (!pawnMood.Includes(pawn?.needs?.mood?.CurInstantLevel ?? 0))
                 return false;
             if (exceptResting && !pawn.Awake())
+                return false;
+            if (pawn.IsColonist && !allowColonist)
+                return false;
+            if (pawn.IsSlaveOfColony && !allowSlave)
+                return false;
+            if (pawn.Ideo != ritual.ideo && !allowOtherIdeo)
+                return false;
+            if (spot != null && respectAllowedArea && pawn.playerSettings != null
+                && pawn.playerSettings.EffectiveAreaRestrictionInPawnCurrentMap != null
+                && !pawn.playerSettings.EffectiveAreaRestrictionInPawnCurrentMap[spot.Position])
                 return false;
 
             return !ritual.ritualOnlyForIdeoMembers || ritual.def.allowSpectatorsFromOtherIdeos || pawn.Ideo == ritual.ideo || !voluntary || allowOtherIdeos || pawn.IsPrisonerOfColony || pawn.RaceProps.Animal;
@@ -107,7 +140,7 @@ namespace DoTheRitualsYourselves.RitualPolicies
                 return false;
             }
 
-            var candidates = map.mapPawns.AllHumanlike.Where(pawn => IsCanJoin(ritual, pawn));
+            var candidates = map.mapPawns.AllHumanlike.Where(pawn => IsCanJoin(ritual, null, pawn));
             if (candidates.Count() < minPawnCount)
             {
                 reason = "DoTheRitualsYourselves.Reason.InsufficientPawn".Translate();

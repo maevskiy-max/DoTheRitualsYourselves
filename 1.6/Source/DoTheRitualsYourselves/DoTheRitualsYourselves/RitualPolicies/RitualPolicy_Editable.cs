@@ -17,13 +17,18 @@ namespace DoTheRitualsYourselves.RitualPolicies
         public RitualPolicy_Editable(
             string label,
             int minPawnCount,
+            int maxNonRoleCount,
             FloatRange avgMood,
             IntRange time,
             bool invertTime,
             FloatRange pawnHealth,
             FloatRange pawnMood,
-            bool exceptResting) 
-            : base(minPawnCount, avgMood, time, invertTime, pawnHealth, pawnMood, exceptResting)
+            bool exceptResting,
+            bool respectAllowedArea,
+            bool allowColonist,
+            bool allowSlave,
+            bool allowOtherIdeo)
+            : base(minPawnCount, maxNonRoleCount, avgMood, time, invertTime, pawnHealth, pawnMood, exceptResting, respectAllowedArea, allowColonist, allowSlave, allowOtherIdeo)
         {
             this.label = label;
         }

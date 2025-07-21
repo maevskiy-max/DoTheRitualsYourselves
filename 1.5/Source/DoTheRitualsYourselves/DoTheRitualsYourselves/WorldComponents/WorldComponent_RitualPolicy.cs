@@ -14,21 +14,29 @@ namespace DoTheRitualsYourselves.WorldComponents
             { 1, new RitualPolicy_Editable(
                 label: "DoTheRitualsYourselves.Policy.DaytimeRitual".Translate(),
                 minPawnCount: 1,
+                maxNonRoleCount: 50,
                 avgMood: new FloatRange(0f, 1f),
                 time: new IntRange(6, 22),
                 invertTime: false,
                 pawnHealth: new FloatRange(0f, 1f),
                 pawnMood: new FloatRange(0f, 1f),
-                exceptResting: false) },
+                exceptResting: false,
+                allowColonist: true,
+                allowSlave: true,
+                allowOtherIdeo: true) },
             { 2, new RitualPolicy_Editable(
                 label: "DoTheRitualsYourselves.Policy.NightRitual".Translate(),
                 minPawnCount: 1,
+                maxNonRoleCount: 50,
                 avgMood: new FloatRange(0f, 1f),
                 time: new IntRange(6, 22),
                 invertTime: true,
                 pawnHealth: new FloatRange(0f, 1f),
                 pawnMood: new FloatRange(0f, 1f),
-                exceptResting: false) }
+                exceptResting: false,
+                allowColonist: true,
+                allowSlave: true,
+                allowOtherIdeo: true) }
         };
         private int nextID = 3;
 

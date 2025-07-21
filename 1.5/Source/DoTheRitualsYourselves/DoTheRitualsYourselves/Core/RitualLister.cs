@@ -13,8 +13,19 @@ namespace DoTheRitualsYourselves.Core
         {
             ritualBuildingDefs = new List<ThingDef>();
             foreach (var def in DefDatabase<ThingDef>.AllDefs)
-                if (def?.building?.buildingTags?.Contains("RitualFocus") ?? false)
+                if (def.IsRitualBuilding())
                     ritualBuildingDefs.Add(def);
+        }
+
+        public static bool IsRitualBuilding(this ThingDef def)
+        {
+            if (def?.building?.buildingTags?.Contains("RitualFocus") ?? false)
+                return true;
+            if (def.HasComp<CompGatherSpot>())
+                return true;
+            if (def.HasComp<CompLightball>())
+                return true;
+            return false;
         }
 
         public static IEnumerable<Thing> GetRitualBuildings(this Map map)

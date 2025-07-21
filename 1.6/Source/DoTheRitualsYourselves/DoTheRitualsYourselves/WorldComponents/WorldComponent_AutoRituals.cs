@@ -49,6 +49,8 @@ namespace DoTheRitualsYourselves.WorldComponents
         public override void WorldComponentTick()
         {
             base.WorldComponentTick();
+            if (Find.TickManager.TicksGame % 10 != 0)
+                return;
 
             if (nextRitualTick <= 0)
             {
@@ -66,7 +68,7 @@ namespace DoTheRitualsYourselves.WorldComponents
                         extraDatas.Add(id, new RitualExtraData());
                     RitualExtraData ex = extraDatas[id];
 
-                    ex.nextCheckTick--;
+                    ex.nextCheckTick -= 10;
                     if (ex.nextCheckTick <= 0)
                     {
                         if (ritual.TryStart())
@@ -81,7 +83,7 @@ namespace DoTheRitualsYourselves.WorldComponents
             }
             else
             {
-                nextRitualTick--;
+                nextRitualTick -= 10;
                 if (nextRitualTick < 0)
                     nextRitualTick = 0;
             }
