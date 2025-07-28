@@ -1,5 +1,7 @@
 ﻿using DoTheRitualsYourselves.Core;
 using DoTheRitualsYourselves.Extra;
+using DoTheRitualsYourselves.Lister.Group;
+using DoTheRitualsYourselves.Lister.Rituals;
 using DoTheRitualsYourselves.RitualPolicies;
 using RimWorld;
 using RimWorld.Planet;
@@ -54,14 +56,14 @@ namespace DoTheRitualsYourselves.WorldComponents
 
             if (nextRitualTick <= 0)
             {
-                var rituals = new List<Precept_Ritual>();
+                var rituals = new List<Ritual>();
 
-                foreach (Ideo ideo in Faction.OfPlayer.ideos.AllIdeos)
-                    foreach (Precept_Ritual ritual in ideo.GetRituals())
+                foreach (RitualGroup group in RitualLister.GetRitualGroups())
+                    foreach (Ritual ritual in group.GetAllRituals())
                         rituals.Add(ritual);
                 rituals.Shuffle();
 
-                foreach (Precept_Ritual ritual in rituals)
+                foreach (Ritual ritual in rituals)
                 {
                     int id = ritual.Id;
                     if (!extraDatas.ContainsKey(id))

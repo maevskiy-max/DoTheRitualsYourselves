@@ -1,4 +1,5 @@
 ﻿using DoTheRitualsYourselves.Extra;
+using DoTheRitualsYourselves.Lister.Rituals;
 using DoTheRitualsYourselves.RitualPolicies;
 using DoTheRitualsYourselves.WorldComponents;
 using RimWorld;
@@ -45,13 +46,15 @@ namespace DoTheRitualsYourselves.Core
             return num;
         }
 
-        public static bool CanStartWithObligations(Precept_Ritual ritual, Thing thing, ref RitualObligation ritualObligation, ref string reason)
+        public static bool CanStartWithObligations(Ritual ritual, Thing thing, ref RitualObligation ritualObligation, ref string reason)
         {
-            if (!ritual.activeObligations.NullOrEmpty())
+            Precept_Ritual precept = ritual.Precept;
+
+            if (!precept.activeObligations.NullOrEmpty())
             {
-                foreach (RitualObligation activeObligation in ritual.activeObligations)
+                foreach (RitualObligation activeObligation in precept.activeObligations)
                 {
-                    RitualTargetUseReport ritualTargetUseReport2 = ritual.CanUseTarget(thing, activeObligation);
+                    RitualTargetUseReport ritualTargetUseReport2 = precept.CanUseTarget(thing, activeObligation);
                     if (ritualTargetUseReport2.canUse)
                     {
                         ritualObligation = activeObligation;
@@ -60,16 +63,16 @@ namespace DoTheRitualsYourselves.Core
                 }
             }
 
-            if (ritual.isAnytime)
+            if (precept.isAnytime)
             {
-                var ritualTargetUseReport = ritual.CanUseTarget(thing, null);
+                var ritualTargetUseReport = precept.CanUseTarget(thing, null);
                 if (!ritualTargetUseReport.canUse)
                     return false;
                 reason = ritualTargetUseReport.failReason;
                 return true;
             }
 
-            RitualObligationTrigger ritualObligationTrigger = ritual.obligationTriggers?.FirstOrDefault((RitualObligationTrigger o) => o is RitualObligationTrigger_Date);
+            RitualObligationTrigger ritualObligationTrigger = precept.obligationTriggers?.FirstOrDefault((RitualObligationTrigger o) => o is RitualObligationTrigger_Date);
             if (ritualObligationTrigger != null)
             {
                 RitualObligationTrigger_Date ritualObligationTrigger_Date = (RitualObligationTrigger_Date)ritualObligationTrigger;
@@ -77,7 +80,7 @@ namespace DoTheRitualsYourselves.Core
                 int num2 = ritualObligationTrigger_Date.CurrentTickRelative();
                 if (num2 > num)
                     num += 3600000;
-                reason = "DateRitualNoObligation".Translate(ritual.LabelCap, (num - num2).ToStringTicksToPeriod(), ritualObligationTrigger_Date.DateString).Resolve();
+                reason = "DateRitualNoObligation".Translate(precept.LabelCap, (num - num2).ToStringTicksToPeriod(), ritualObligationTrigger_Date.DateString).Resolve();
             }
 
             if (reason == "")
@@ -85,17 +88,19 @@ namespace DoTheRitualsYourselves.Core
             return false;
         }
 
-        public static bool CanStartWithPawns(Precept_Ritual ritual, Thing thing, RitualObligation ritualObligation, ref string reason, ref StartRitualCallback callback, ref float quality)
+        public static bool CanStartWithPawns(Ritual ritual, Thing thing, RitualObligation ritualObligation, ref string reason, ref StartRitualCallback callback, ref float quality)
         {
+            Precept_Ritual precept = ritual.Precept;
+
             TargetInfo targetInfo = new TargetInfo(thing);
             RitualPolicy policy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
 
             Dialog_BeginRitual.PawnFilter filter = delegate (Pawn pawn, bool voluntary, bool allowOtherIdeos)
             {
-                return policy.IsCanJoin(ritual, thing, pawn, voluntary, allowOtherIdeos);
+                return policy.IsCanJoin(precept, thing, pawn, voluntary, allowOtherIdeos);
             };
 
-            RitualRoleAssignments ritualRoleAssignments = Dialog_BeginRitual.CreateRitualRoleAssignments(ritual, targetInfo, thing.Map, filter, null, null, null);
+            RitualRoleAssignments ritualRoleAssignments = Dialog_BeginRitual.CreateRitualRoleAssignments(precept, targetInfo, thing.Map, filter, null, null, null);
             ritualRoleAssignments.FillPawns(filter, targetInfo);
 
             while (ritualRoleAssignments.SpectatorsForReading.Count > policy.maxNonRoleCount)
@@ -119,34 +124,34 @@ namespace DoTheRitualsYourselves.Core
                 }
             }
 
-            if (ritual.behavior.SpectatorsRequired() && ritualRoleAssignments.SpectatorsForReading.Count == 0)
+            if (precept.behavior.SpectatorsRequired() && ritualRoleAssignments.SpectatorsForReading.Count == 0)
             {
                 reason = "MessageRitualNeedsAtLeastOneSpectator".Translate();
                 return false;
             }
 
-            if (ritual.outcomeEffect != null)
+            if (precept.outcomeEffect != null)
             {
-                foreach (string item in ritual.outcomeEffect.BlockingIssues(ritual, targetInfo, ritualRoleAssignments))
+                foreach (string item in precept.outcomeEffect.BlockingIssues(precept, targetInfo, ritualRoleAssignments))
                 {
                     reason = item;
                     return false;
                 }
             }
 
-            if (ritual.obligationTargetFilter != null)
+            if (precept.obligationTargetFilter != null)
             {
-                foreach (string blockingIssue in ritual.obligationTargetFilter.GetBlockingIssues(targetInfo, ritualRoleAssignments))
+                foreach (string blockingIssue in precept.obligationTargetFilter.GetBlockingIssues(targetInfo, ritualRoleAssignments))
                 {
                     reason = blockingIssue;
                     return false;
                 }
             }
 
-            if (!ritual.behavior.def.roles.NullOrEmpty())
+            if (!precept.behavior.def.roles.NullOrEmpty())
             {
                 bool stillAddToPawnList;
-                foreach (IGrouping<string, RitualRole> item2 in from r in ritual.behavior.def.roles group r by r.mergeId ?? r.id)
+                foreach (IGrouping<string, RitualRole> item2 in from r in precept.behavior.def.roles group r by r.mergeId ?? r.id)
                 {
                     RitualRole firstRole = item2.First();
                     int requiredPawnCount = item2.Count((RitualRole r) => r.required);
@@ -190,30 +195,32 @@ namespace DoTheRitualsYourselves.Core
                 }
             }
 
-            if (ritual.ritualOnlyForIdeoMembers && !ritualRoleAssignments.Participants.Any((Pawn p) => p.Ideo == ritual.ideo))
+            if (precept.ritualOnlyForIdeoMembers && !ritualRoleAssignments.Participants.Any((Pawn p) => p.Ideo == precept.ideo))
             {
-                reason = "MessageNeedAtLeastOneParticipantOfIdeo".Translate(ritual.ideo.memberName);
+                reason = "MessageNeedAtLeastOneParticipantOfIdeo".Translate(precept.ideo.memberName);
                 return false;
             }
 
-            quality = PredictedQuality(ritual, targetInfo, ritualObligation, ritualRoleAssignments);
-            callback = () => ritual.behavior.TryExecuteOn(targetInfo, null, ritual, ritualObligation, ritualRoleAssignments, true);
+            quality = PredictedQuality(precept, targetInfo, ritualObligation, ritualRoleAssignments);
+            callback = () => precept.behavior.TryExecuteOn(targetInfo, null, precept, ritualObligation, ritualRoleAssignments, true);
 
             return true;
         }
 
-        public static bool TryStart(this Precept_Ritual ritual, ref string reason, bool forced, bool simulated, Map map = null)
+        public static bool TryStart(this Ritual ritual, ref string reason, bool forced, bool simulated, Map map = null)
         {
+            Precept_Ritual precept = ritual.Precept;
+
             if (map == null)
                 map = Find.CurrentMap;
 
-            if (!ritual.allowOtherInstances)
+            if (!precept.allowOtherInstances)
             {
                 foreach (LordJob_Ritual activeRitual in Find.IdeoManager.GetActiveRituals(map))
                 {
-                    if (activeRitual.Ritual == ritual)
+                    if (activeRitual.Ritual == precept)
                     {
-                        reason = "CantStartRitualAlreadyInProgress".Translate(ritual.LabelCap);
+                        reason = "CantStartRitualAlreadyInProgress".Translate(precept.LabelCap);
                         return false;
                     }
                 }
@@ -226,13 +233,13 @@ namespace DoTheRitualsYourselves.Core
             }
 
             RitualPolicy policy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
-            if (!map.mapPawns.FreeColonistsAndPrisonersSpawned.Any(pawn => policy.IsCanJoin(ritual, null, pawn)))
+            if (!map.mapPawns.FreeColonistsAndPrisonersSpawned.Any(pawn => policy.IsCanJoin(precept, null, pawn)))
             {
                 reason = "DoTheRitualsYourselves.Reason.Nobody".Translate();
                 return false;
             }
 
-            if (!forced && !policy.IsAccept(ritual, map, ref reason))
+            if (!forced && !policy.IsAccept(precept, map, ref reason))
                 return false;
 
             string reason2 = "", reason3 = "";
@@ -259,7 +266,7 @@ namespace DoTheRitualsYourselves.Core
                 }
             }
 
-            foreach (Thing thing in map.GetRitualBuildings())
+            foreach (Thing thing in map.GetRitualBuildings(ritual.GetBuildingDefs().ToList()))
             {
                 RitualObligation ritualObligation = null;
                 if (!CanStartWithObligations(ritual, thing, ref ritualObligation, ref reason2))
@@ -296,7 +303,7 @@ namespace DoTheRitualsYourselves.Core
             return false;
         }
 
-        public static bool TryStart(this Precept_Ritual ritual)
+        public static bool TryStart(this Ritual ritual)
         {
             RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
             if (!extra.autoStart)
