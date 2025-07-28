@@ -10,13 +10,4 @@
     <description>
 Colonists prepare and start rituals on their own. Naturally.
     </description>
-    <modDependencies>
-		<li>
-			<packageId>Ludeon.RimWorld.Ideology</packageId>
-			<displayName>Ideology</displayName>
-		</li>
-	</modDependencies>
-	<loadAfter>
-		<li>Ludeon.Rimworld.Ideology</li>
-	</loadAfter>
 </ModMetaData>

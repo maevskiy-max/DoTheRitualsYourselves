@@ -29,7 +29,7 @@ namespace DoTheRitualsYourselves.Lister.Group
         {
             List<Precept_Ritual> rituals = ideo.PreceptsListForReading.OfType<Precept_Ritual>().ToList();
             foreach (Precept_Ritual ritual in rituals)
-                if (ritual.def.visible)
+                if (ritual.def.visible || ritual.def.defName == "Conversion")
                     yield return new Ritual(this, ritual);
         }
 
@@ -53,8 +53,8 @@ namespace DoTheRitualsYourselves.Lister.Group
         {
             if (t.Thing == null)
                 return false;
-            if (GetBuildingDefs().Contains(t.Thing.def))
-                return true;
+            if (!GetBuildingDefs().Contains(t.Thing.def))
+                return false;
 
             if (ritual.def.defName == "Funeral")
             {

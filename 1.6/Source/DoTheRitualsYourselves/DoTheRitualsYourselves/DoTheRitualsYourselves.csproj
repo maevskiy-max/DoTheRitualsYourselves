@@ -61,7 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lister\GroupLister\ColonyRitualGroupLister.cs" />
     <Compile Include="Lister\GroupLister\IdeoRitualGroupLister.cs" />
+    <Compile Include="Lister\Group\ColonyRitualGroup.cs" />
     <Compile Include="Lister\RitualLister.cs" />
     <Compile Include="ExtraData\RitualExtraData.cs" />
     <Compile Include="Lister\Group\IdeoRitualGroup.cs" />

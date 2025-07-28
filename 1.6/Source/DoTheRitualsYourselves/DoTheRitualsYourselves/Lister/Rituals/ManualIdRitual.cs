@@ -10,7 +10,7 @@ namespace DoTheRitualsYourselves.Lister.Rituals
     {
         private int id;
 
-        public ManualIdRitual(RitualGroup group, Precept_Ritual ritual, int id) : base(group, ritual)
+        public ManualIdRitual(RitualGroup group, Precept_Ritual ritual, int id, bool showType = true) : base(group, ritual, showType)
         {
             this.id = id;
         }

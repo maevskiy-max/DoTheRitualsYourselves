@@ -88,7 +88,7 @@ namespace DoTheRitualsYourselves.Windows
             windowRect.height = InitialSize.y;
             foreach (Ritual ritual in selectedGroup.GetVisibleRituals())
             {
-                Widgets.Label(new Rect(inRect.x + 20f, curY, nameWidth, lineHeight), new GUIContent($"{ritual.Label} ({ritual.Type})", ritual.Icon));
+                Widgets.Label(new Rect(inRect.x + 20f, curY, nameWidth, lineHeight), new GUIContent(ritual.Label, ritual.Icon));
                 RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
 
                 // start now

@@ -22,7 +22,8 @@ namespace DoTheRitualsYourselves
         {
             List<RitualGroup> result = new List<RitualGroup>();
             foreach (RitualGroupLister lister in groupListers)
-                result.AddRange(lister.GetGroups());
+                if (!lister.IsSkipped)
+                    result.AddRange(lister.GetGroups());
             result.Sort((a, b) => a.Priority.CompareTo(b.Priority));
             return result;
         }

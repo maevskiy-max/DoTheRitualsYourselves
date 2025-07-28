@@ -3,7 +3,6 @@
     <DoTheRitualsYourselves.Reason.RitualNoObligation>The conditions to start the ritual are not met.</DoTheRitualsYourselves.Reason.RitualNoObligation>
     <DoTheRitualsYourselves.Reason.RitualNoSpot>No suitable location is available to start the ritual.</DoTheRitualsYourselves.Reason.RitualNoSpot>
     <DoTheRitualsYourselves.Reason.WrongTime>It is not within the time range specified by the ritual policy.</DoTheRitualsYourselves.Reason.WrongTime>
-    <DoTheRitualsYourselves.Reason.InsufficientPawn>There are not enough participants to start the ritual as per policy.</DoTheRitualsYourselves.Reason.InsufficientPawn>
     <DoTheRitualsYourselves.Reason.WrongMood>The average mood does not meet the requirement of the ritual policy.</DoTheRitualsYourselves.Reason.WrongMood>
     <DoTheRitualsYourselves.Reason.RepeatPenaltyActive>The ritual was recently held.</DoTheRitualsYourselves.Reason.RepeatPenaltyActive>
     <DoTheRitualsYourselves.Reason.Danger>There is danger present, so the ritual cannot start.</DoTheRitualsYourselves.Reason.Danger>

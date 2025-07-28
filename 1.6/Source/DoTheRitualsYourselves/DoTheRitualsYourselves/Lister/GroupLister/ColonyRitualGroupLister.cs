@@ -1,40 +1,38 @@
 ﻿using DoTheRitualsYourselves.Lister.Group;
 using RimWorld;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
 namespace DoTheRitualsYourselves.Lister.GroupLister
 {
-    public class IdeoRitualGroupLister : RitualGroupLister
+    public class ColonyRitualGroupLister : RitualGroupLister
     {
-        public override bool IsSkipped => !ModsConfig.IsActive("ludeon.rimworld.ideology");
+        public override bool IsSkipped => false;
         private List<ThingDef> buildingDefs = new List<ThingDef>();
 
-        public IdeoRitualGroupLister()
+        public ColonyRitualGroupLister()
         {
             foreach (var def in DefDatabase<ThingDef>.AllDefs)
-                if (IsIdeoRitualBuilding(def))
+                if (IsColonyRitualBuilding(def))
                     buildingDefs.Add(def);
         }
 
-        private bool IsIdeoRitualBuilding(ThingDef def)
+        private bool IsColonyRitualBuilding(ThingDef def)
         {
             if (def?.building?.buildingTags?.Contains("RitualFocus") ?? false)
                 return true;
             if (def.HasComp<CompGatherSpot>())
                 return true;
-            if (def.HasComp<CompLightball>())
+            if (def.HasComp<CompPsylinkable>())
+                return true;
+            if (def.thingClass.IsSubclassOf(typeof(Building_Throne)))
                 return true;
             return false;
         }
 
         public override IEnumerable<RitualGroup> GetGroups()
         {
-            int priority = 1;
-            foreach (Ideo ideo in Find.IdeoManager.IdeosListForReading)
-                if (Faction.OfPlayer.ideos.AllIdeos.Contains(ideo))
-                    yield return new IdeoRitualGroup(this, priority++, ideo);
+            yield return new ColonyRitualGroup(this);
         }
 
         public override IEnumerable<ThingDef> GetBuildingDefs()
