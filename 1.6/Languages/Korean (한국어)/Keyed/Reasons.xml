@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
     <DoTheRitualsYourselves.Reason.RitualNoObligation>행사를 시작할 조건이 충족되지 않았습니다.</DoTheRitualsYourselves.Reason.RitualNoObligation>
-    <DoTheRitualsYourselves.Reason.RitualNoSpot>행사를 시작할 적절한 장소가 없습니다.</DoTheRitualsYourselves.Reason.RitualNoSpot>
+    <DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>행사를 시작할 적절한 장소가 없거나 시작 조건이 충족되지 않았습니다.</DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>
     <DoTheRitualsYourselves.Reason.WrongTime>행사 정책에 맞지 않는 시간입니다.</DoTheRitualsYourselves.Reason.WrongTime>
     <DoTheRitualsYourselves.Reason.WrongMood>행사 정책에 맞지 않는 평균 기분입니다.</DoTheRitualsYourselves.Reason.WrongMood>
     <DoTheRitualsYourselves.Reason.RepeatPenaltyActive>이미 얼마 전에 행사를 진행했습니다.</DoTheRitualsYourselves.Reason.RepeatPenaltyActive>

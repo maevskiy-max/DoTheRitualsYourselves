@@ -29,8 +29,12 @@ namespace DoTheRitualsYourselves.Lister.Group
         {
             List<Precept_Ritual> rituals = ideo.PreceptsListForReading.OfType<Precept_Ritual>().ToList();
             foreach (Precept_Ritual ritual in rituals)
-                if (ritual.def.visible || ritual.def.defName == "Conversion")
+            {
+                if (ritual.def.visible)
                     yield return new Ritual(this, ritual);
+                else if (ritual.def.defName == "Conversion")
+                    yield return new Ritual(this, ritual, false);
+            }
         }
 
         public override IEnumerable<Ritual> GetAllRituals()
@@ -40,6 +44,8 @@ namespace DoTheRitualsYourselves.Lister.Group
             {
                 if (ritual.def.visible)
                     yield return new Ritual(this, ritual);
+                else if (ritual.def.defName == "Conversion")
+                    yield return new Ritual(this, ritual, false);
                 else if (ritual.def.defName == "FuneralNoCorpse")
                 {
                     Precept_Ritual funeral = rituals.Find(ritual2 => ritual2.def.defName == "Funeral");

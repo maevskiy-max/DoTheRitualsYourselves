@@ -9,7 +9,7 @@ using DoTheRitualsYourselves.WorldComponents;
 using DoTheRitualsYourselves.Extra;
 using DoTheRitualsYourselves.Lister.Group;
 using DoTheRitualsYourselves.Lister.Rituals;
-using DoTheRitualsYourselves.Lister.GroupLister;
+using Verse.Noise;
 
 namespace DoTheRitualsYourselves.Windows
 {
@@ -34,7 +34,7 @@ namespace DoTheRitualsYourselves.Windows
             {
                 int ritualCount = (selectedGroup ?? DefaultGroup).GetVisibleRituals().Count();
                 return new Vector2(
-                    spacing * 2 + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace * 2 + 45f,
+                    spacing * 2 + nameWidth + spaceBetween * 5 + shortSpace * 2 + longSpace * 3 + 45f,
                     (ritualCount + 2) * (lineHeight + spaceBetween) + labelBetween + spacing + 15f);
             }
         }
@@ -57,6 +57,7 @@ namespace DoTheRitualsYourselves.Windows
             Text.Font = GameFont.Small;
             var rectIdeo = new Rect(inRect.x + spacing, curY, nameWidth, lineHeight);
             TooltipHandler.TipRegion(rectIdeo, "DoTheRitualsYourselves.UI.Ideo.Tip".Translate());
+
             if (Widgets.ButtonText(rectIdeo, selectedGroup.Label))
             {
                 List<FloatMenuOption> options = new List<FloatMenuOption>();
@@ -71,7 +72,8 @@ namespace DoTheRitualsYourselves.Windows
             var rectLabelStartNow = new Rect(inRect.x + spacing + nameWidth + spaceBetween, curY, shortSpace, lineHeight);
             var rectLabelAutoStart = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 2 + shortSpace, curY, shortSpace, lineHeight);
             var rectLabelPolicy = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 3 + shortSpace * 2, curY, longSpace, lineHeight);
-            var rectLabelSpot = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace, curY, longSpace, lineHeight);
+            var rectLabelSpot = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 4 + shortSpace * 2 + longSpace, curY, longSpace, lineHeight); 
+            var rectLabelRole = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 5 + shortSpace * 2 + longSpace * 2, curY, longSpace, lineHeight);
 
             Widgets.Label(rectLabelStartNow, "DoTheRitualsYourselves.UI.StartNow".Translate());
             TooltipHandler.TipRegion(rectLabelStartNow, "DoTheRitualsYourselves.UI.StartNow.Tip".Translate());
@@ -81,6 +83,8 @@ namespace DoTheRitualsYourselves.Windows
             TooltipHandler.TipRegion(rectLabelPolicy, "DoTheRitualsYourselves.UI.RitualPolicy.Tip".Translate());
             Widgets.Label(rectLabelSpot, "DoTheRitualsYourselves.UI.RitualSpot".Translate());
             TooltipHandler.TipRegion(rectLabelSpot, "DoTheRitualsYourselves.UI.RitualSpot.Tip".Translate());
+            Widgets.Label(rectLabelRole, "DoTheRitualsYourselves.UI.RitualRole".Translate());
+            TooltipHandler.TipRegion(rectLabelRole, "DoTheRitualsYourselves.UI.RitualRole.Tip".Translate());
             Text.Anchor = prevAnchor;
 
             curY += lineHeight + labelBetween;
@@ -88,17 +92,29 @@ namespace DoTheRitualsYourselves.Windows
             windowRect.height = InitialSize.y;
             foreach (Ritual ritual in selectedGroup.GetVisibleRituals())
             {
-                Widgets.Label(new Rect(inRect.x + 20f, curY, nameWidth, lineHeight), new GUIContent(ritual.Label, ritual.Icon));
-                RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
+                Rect labelRect = new Rect(inRect.x + 20f, curY, nameWidth, lineHeight);
+                Widgets.Label(labelRect, new GUIContent(ritual.Label, ritual.Icon));
+                TooltipHandler.TipRegion(labelRect, ritual.Precept.DescriptionForTip);
+                RitualExtraData extra = ritual.GetRitualExtraData();
 
                 // start now
                 string reason = "";
                 Rect startNowRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween, curY, shortSpace, lineHeight);
                 if (!ritual.TryStart(ref reason, true, true))
                 {
-                    if (Widgets.ButtonText(startNowRect, "DoTheRitualsYourselves.UI.CannotStart".Translate()))
-                        Messages.Message("DoTheRitualsYourselves.Message.CantStart".Translate(), MessageTypeDefOf.RejectInput);
-                    TooltipHandler.TipRegion(startNowRect, reason != "" ? reason : "DoTheRitualsYourselves.Reason.CantUnknown".Translate().RawText);
+                    var lord = Find.IdeoManager.GetActiveRituals(Find.CurrentMap).Find(activeRitual => activeRitual.Ritual == ritual.Precept);
+                    if (!ritual.Precept.allowOtherInstances && lord != null)
+                    {
+                        if (Widgets.ButtonText(startNowRect, "DoTheRitualsYourselves.UI.Cancel".Translate()))
+                            lord.Cancel();
+                        TooltipHandler.TipRegion(startNowRect, "DoTheRitualsYourselves.UI.Cancel.Tip".Translate());
+                    }
+                    else
+                    {
+                        if (Widgets.ButtonText(startNowRect, "DoTheRitualsYourselves.UI.CannotStart".Translate()))
+                            Messages.Message("DoTheRitualsYourselves.Message.CantStart".Translate(), MessageTypeDefOf.RejectInput);
+                        TooltipHandler.TipRegion(startNowRect, reason != "" ? reason : "DoTheRitualsYourselves.Reason.CantUnknown".Translate().RawText);
+                    }
                 }
                 else
                 {
@@ -124,7 +140,7 @@ namespace DoTheRitualsYourselves.Windows
 
                 // policy
                 Rect policyRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 3 + shortSpace * 2, curY, longSpace, lineHeight);
-                var currentPolicy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
+                var currentPolicy = ritual.GetRitualPolicy();
                 if (Widgets.ButtonText(policyRect, currentPolicy.Label))
                 {
                     List<FloatMenuOption> options = new List<FloatMenuOption>();
@@ -178,6 +194,11 @@ namespace DoTheRitualsYourselves.Windows
                         Find.WindowStack.Add(new FloatMenu(options));
                     }
                 }
+
+                // role
+                Rect roleRect = new Rect(inRect.x + spacing + nameWidth + spaceBetween * 5 + shortSpace * 2 + longSpace * 2, curY, longSpace, lineHeight);
+                if (Widgets.ButtonText(roleRect, "DoTheRitualsYourselves.UI.Assign".Translate()))
+                    Find.WindowStack.Add(new Dialog_AssignRole(ritual));
 
                 curY += lineHeight + spaceBetween;
             }

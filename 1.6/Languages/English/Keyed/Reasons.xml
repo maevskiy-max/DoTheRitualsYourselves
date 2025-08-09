@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
     <DoTheRitualsYourselves.Reason.RitualNoObligation>The conditions to start the ritual are not met.</DoTheRitualsYourselves.Reason.RitualNoObligation>
-    <DoTheRitualsYourselves.Reason.RitualNoSpot>No suitable location is available to start the ritual.</DoTheRitualsYourselves.Reason.RitualNoSpot>
+    <DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>No suitable location is available to start the ritual, or The conditions to start the ritual are not met.</DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>
     <DoTheRitualsYourselves.Reason.WrongTime>It is not within the time range specified by the ritual policy.</DoTheRitualsYourselves.Reason.WrongTime>
     <DoTheRitualsYourselves.Reason.WrongMood>The average mood does not meet the requirement of the ritual policy.</DoTheRitualsYourselves.Reason.WrongMood>
     <DoTheRitualsYourselves.Reason.RepeatPenaltyActive>The ritual was recently held.</DoTheRitualsYourselves.Reason.RepeatPenaltyActive>

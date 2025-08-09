@@ -13,8 +13,6 @@ namespace DoTheRitualsYourselves.Core
 {
     public static class RitualStarter
     {
-        public delegate void StartRitualCallback();
-
         public static float PredictedQuality(Precept_Ritual ritual, TargetInfo targetInfo, RitualObligation ritualObligation, RitualRoleAssignments ritualRoleAssignments)
         {
             var outcome = ritual.outcomeEffect.def;
@@ -46,63 +44,12 @@ namespace DoTheRitualsYourselves.Core
             return num;
         }
 
-        public static bool CanStartWithObligations(Ritual ritual, Thing thing, ref RitualObligation ritualObligation, ref string reason)
+        public static bool CanStartWithPawns(Ritual ritual, Map map, TargetInfo targetInfo, RitualObligation ritualObligation, ref string reason, ref Ritual.StartRitualCallback callback, ref float quality)
         {
             Precept_Ritual precept = ritual.Precept;
+            RitualPolicy policy = ritual.GetRitualPolicy();
 
-            if (!precept.activeObligations.NullOrEmpty())
-            {
-                foreach (RitualObligation activeObligation in precept.activeObligations)
-                {
-                    RitualTargetUseReport ritualTargetUseReport2 = precept.CanUseTarget(thing, activeObligation);
-                    if (ritualTargetUseReport2.canUse)
-                    {
-                        ritualObligation = activeObligation;
-                        return true;
-                    }
-                }
-            }
-
-            if (precept.isAnytime)
-            {
-                var ritualTargetUseReport = precept.CanUseTarget(thing, null);
-                if (!ritualTargetUseReport.canUse)
-                    return false;
-                reason = ritualTargetUseReport.failReason;
-                return true;
-            }
-
-            RitualObligationTrigger ritualObligationTrigger = precept.obligationTriggers?.FirstOrDefault((RitualObligationTrigger o) => o is RitualObligationTrigger_Date);
-            if (ritualObligationTrigger != null)
-            {
-                RitualObligationTrigger_Date ritualObligationTrigger_Date = (RitualObligationTrigger_Date)ritualObligationTrigger;
-                int num = ritualObligationTrigger_Date.OccursOnTick();
-                int num2 = ritualObligationTrigger_Date.CurrentTickRelative();
-                if (num2 > num)
-                    num += 3600000;
-                reason = "DateRitualNoObligation".Translate(precept.LabelCap, (num - num2).ToStringTicksToPeriod(), ritualObligationTrigger_Date.DateString).Resolve();
-            }
-
-            if (reason == "")
-                reason = "DoTheRitualsYourselves.Reason.RitualNoObligation".Translate();
-            return false;
-        }
-
-        public static bool CanStartWithPawns(Ritual ritual, Thing thing, RitualObligation ritualObligation, ref string reason, ref StartRitualCallback callback, ref float quality)
-        {
-            Precept_Ritual precept = ritual.Precept;
-
-            TargetInfo targetInfo = new TargetInfo(thing);
-            RitualPolicy policy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
-
-            Dialog_BeginRitual.PawnFilter filter = delegate (Pawn pawn, bool voluntary, bool allowOtherIdeos)
-            {
-                return policy.IsCanJoin(precept, thing, pawn, voluntary, allowOtherIdeos);
-            };
-
-            RitualRoleAssignments ritualRoleAssignments = Dialog_BeginRitual.CreateRitualRoleAssignments(precept, targetInfo, thing.Map, filter, null, null, null);
-            ritualRoleAssignments.FillPawns(filter, targetInfo);
-
+            RitualRoleAssignments ritualRoleAssignments = ritual.CreateRitualRoleAssignments(targetInfo, map);
             while (ritualRoleAssignments.SpectatorsForReading.Count > policy.maxNonRoleCount)
             {
                 Pawn pawn = ritualRoleAssignments.SpectatorsForReading.RandomElement();
@@ -201,10 +148,13 @@ namespace DoTheRitualsYourselves.Core
                 return false;
             }
 
-            quality = PredictedQuality(precept, targetInfo, ritualObligation, ritualRoleAssignments);
-            callback = () => precept.behavior.TryExecuteOn(targetInfo, null, precept, ritualObligation, ritualRoleAssignments, true);
-
-            return true;
+            callback = ritual.StartRitual(targetInfo, map, ritualObligation, ritualRoleAssignments);
+            if (callback != null)
+            {
+                quality = PredictedQuality(precept, targetInfo, ritualObligation, ritualRoleAssignments);
+                return true;
+            }
+            return false;
         }
 
         public static bool TryStart(this Ritual ritual, ref string reason, bool forced, bool simulated, Map map = null)
@@ -232,7 +182,7 @@ namespace DoTheRitualsYourselves.Core
                 return false;
             }
 
-            RitualPolicy policy = WorldComponent_AutoRituals.Instance.GetRitualPolicy(ritual.Id);
+            RitualPolicy policy = ritual.GetRitualPolicy();
             if (!map.mapPawns.FreeColonistsAndPrisonersSpawned.Any(pawn => policy.IsCanJoin(precept, null, pawn)))
             {
                 reason = "DoTheRitualsYourselves.Reason.Nobody".Translate();
@@ -243,21 +193,22 @@ namespace DoTheRitualsYourselves.Core
                 return false;
 
             string reason2 = "", reason3 = "";
-            StartRitualCallback callback = null;
+            Ritual.StartRitualCallback callback = null;
             float quality = 0;
 
-            RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
+            RitualExtraData extra = ritual.GetRitualExtraData();
             Thing ritualSpot = extra.ritualSpot;
-            if (!simulated && ritualSpot != null)
+            if (!simulated && ritualSpot != null && ritual.UseRitualSpot)
             {
                 if (!ritualSpot.Spawned)
                     extra.ritualSpot = null;
                 else if (ritualSpot.Map == map)
                 {
                     RitualObligation ritualObligation = null;
-                    if (CanStartWithObligations(ritual, ritualSpot, ref ritualObligation, ref reason2))
+                    TargetInfo targetInfo = new TargetInfo(ritualSpot);
+                    if (ritual.HasObligation(map, targetInfo, ref ritualObligation, ref reason2))
                     {
-                        if (CanStartWithPawns(ritual, ritualSpot, ritualObligation, ref reason3, ref callback, ref quality))
+                        if (CanStartWithPawns(ritual, map, targetInfo, ritualObligation, ref reason3, ref callback, ref quality))
                         {
                             callback();
                             return true;
@@ -266,19 +217,44 @@ namespace DoTheRitualsYourselves.Core
                 }
             }
 
-            foreach (Thing thing in map.GetRitualBuildings(ritual.GetBuildingDefs().ToList()))
+            if (ritual.UseRitualSpot)
+            {
+                foreach (Thing thing in map.GetRitualBuildings(ritual.GetBuildingDefs().ToList()))
+                {
+                    RitualObligation ritualObligation = null;
+                    TargetInfo targetInfo = new TargetInfo(thing);
+                    if (!ritual.HasObligation(map, targetInfo, ref ritualObligation, ref reason2))
+                        continue;
+
+                    Ritual.StartRitualCallback callbackTmp = null;
+                    float qualityTmp = 0;
+
+                    if (simulated)
+                        return true;
+
+                    if (CanStartWithPawns(ritual, map, targetInfo, ritualObligation, ref reason3, ref callbackTmp, ref qualityTmp))
+                    {
+                        if (callback == null || quality < qualityTmp)
+                        {
+                            callback = callbackTmp;
+                            quality = qualityTmp;
+                        }
+                    }
+                }
+            }
+            else
             {
                 RitualObligation ritualObligation = null;
-                if (!CanStartWithObligations(ritual, thing, ref ritualObligation, ref reason2))
-                    continue;
+                if (!ritual.HasObligation(map, TargetInfo.Invalid, ref ritualObligation, ref reason2))
+                    return false;
 
-                StartRitualCallback callbackTmp = null;
+                Ritual.StartRitualCallback callbackTmp = null;
                 float qualityTmp = 0;
 
                 if (simulated)
                     return true;
 
-                if (CanStartWithPawns(ritual, thing, ritualObligation, ref reason3, ref callbackTmp, ref qualityTmp))
+                if (CanStartWithPawns(ritual, map, TargetInfo.Invalid, ritualObligation, ref reason3, ref callbackTmp, ref qualityTmp))
                 {
                     if (callback == null || quality < qualityTmp)
                     {
@@ -294,7 +270,7 @@ namespace DoTheRitualsYourselves.Core
                 return true;
             }
 
-            reason = "DoTheRitualsYourselves.Reason.RitualNoSpot".Translate();
+            reason = "DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation".Translate();
             if (reason3 != "")
                 reason = reason3;
             else if (reason2 != "")
@@ -305,7 +281,7 @@ namespace DoTheRitualsYourselves.Core
 
         public static bool TryStart(this Ritual ritual)
         {
-            RitualExtraData extra = WorldComponent_AutoRituals.Instance.GetRitualExtraData(ritual.Id);
+            RitualExtraData extra = ritual.GetRitualExtraData();
             if (!extra.autoStart)
                 return false;
 

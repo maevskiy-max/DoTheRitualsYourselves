@@ -28,8 +28,8 @@ namespace DoTheRitualsYourselves.Lister.Group
             {
                 if (ModsConfig.IsActive("ludeon.rimworld.royalty"))
                 {
-                    //if (precept.def.defName == "ThroneSpeech")
-                    //    yield return new ManualIdRitual(this, precept, -1001);
+                    if (precept.def.defName == "ThroneSpeech")
+                        yield return new AbilityRitual(this, precept, AbilityDefOf.Speech, "speaker", -1001, false);
                     if (precept.def.defName == "AnimaTreeLinking")
                         yield return new ManualIdRitual(this, precept, -1002, false);
                 }
@@ -38,6 +38,16 @@ namespace DoTheRitualsYourselves.Lister.Group
                     if (precept.def.defName == "LeaderSpeech")
                         yield return new ManualIdRitual(this, precept, -2001, false);
                 }
+                //if (ModsConfig.IsActive("ludeon.rimworld.biotech"))
+                //{
+                //    if (precept.def.defName == "ChildBirth")
+                //        yield return new ManualIdRitual(this, precept, -3001, false);
+                //}
+                //if (ModsConfig.IsActive("ludeon.rimworld.odyssey"))
+                //{
+                //    if (precept.def.defName == "GravshipLaunch")
+                //        yield return new ManualIdRitual(this, precept, -5001, false);
+                //}
             }
         }
 

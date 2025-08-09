@@ -9,11 +9,16 @@
     <DoTheRitualsYourselves.UI.RitualPolicy.Tip>Configure participants and start conditions for the ritual.</DoTheRitualsYourselves.UI.RitualPolicy.Tip>
     <DoTheRitualsYourselves.UI.RitualSpot>Ritual Spot</DoTheRitualsYourselves.UI.RitualSpot>
     <DoTheRitualsYourselves.UI.RitualSpot.Tip>Assign a preferred location for the ritual. If none is set, the highest expected quality location will be used.</DoTheRitualsYourselves.UI.RitualSpot.Tip>
+    <DoTheRitualsYourselves.UI.RitualRole>Role Assignment</DoTheRitualsYourselves.UI.RitualRole>
+    <DoTheRitualsYourselves.UI.RitualRole.Tip>Set participants to be assigned to each role first. If assignment is not possible, they may be replaced by other participants.</DoTheRitualsYourselves.UI.RitualRole.Tip>
     <DoTheRitualsYourselves.UI.Start>Start</DoTheRitualsYourselves.UI.Start>
     <DoTheRitualsYourselves.UI.CannotStart>Cannot Start</DoTheRitualsYourselves.UI.CannotStart>
+    <DoTheRitualsYourselves.UI.Cancel>Cancel</DoTheRitualsYourselves.UI.Cancel>
+    <DoTheRitualsYourselves.UI.Cancel.Tip>Immediately cancel the ongoing ritual.</DoTheRitualsYourselves.UI.Cancel.Tip>
     <DoTheRitualsYourselves.UI.StartTooltip>Start the ritual immediately with proper preparation.</DoTheRitualsYourselves.UI.StartTooltip>
     <DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip>The ritual was performed recently, so the quality may be low.</DoTheRitualsYourselves.UI.RepeatPenaltyStartTooltip>
     <DoTheRitualsYourselves.UI.Edit>Edit...</DoTheRitualsYourselves.UI.Edit>
+    <DoTheRitualsYourselves.UI.Assign>Assign</DoTheRitualsYourselves.UI.Assign>
     
     <DoTheRitualsYourselves.UI.RitualSpot.None>Auto</DoTheRitualsYourselves.UI.RitualSpot.None>
     <DoTheRitualsYourselves.UI.RitualSpot.Assign>Assign</DoTheRitualsYourselves.UI.RitualSpot.Assign>
@@ -56,4 +61,10 @@
     <DoTheRitualsYourselves.UI.Delete>Delete</DoTheRitualsYourselves.UI.Delete>
     <DoTheRitualsYourselves.UI.Add>Add</DoTheRitualsYourselves.UI.Add>
     <DoTheRitualsYourselves.UI.DeleteConfirm>Are you sure you want to delete this ritual policy?</DoTheRitualsYourselves.UI.DeleteConfirm>
+
+    <DoTheRitualsYourselves.UI.AssignRole.Label>Assign Roles</DoTheRitualsYourselves.UI.AssignRole.Label>
+    <DoTheRitualsYourselves.UI.AssignRole.Desc>Set participant priority for each role from top to bottom. [No Role] will not be assigned to other roles, and [Unassigned] will fill empty roles and spectators.</DoTheRitualsYourselves.UI.AssignRole.Desc>
+    <DoTheRitualsYourselves.UI.AssignRole.Unassigned>Unassigned</DoTheRitualsYourselves.UI.AssignRole.Unassigned>
+    <DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>This is the list of participants without assigned role priorities. If preferred assignment fails, participants will be chosen from the unassigned list.</DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>
+    <DoTheRitualsYourselves.UI.AssignRole.None>No Role</DoTheRitualsYourselves.UI.AssignRole.None>
 </LanguageData>

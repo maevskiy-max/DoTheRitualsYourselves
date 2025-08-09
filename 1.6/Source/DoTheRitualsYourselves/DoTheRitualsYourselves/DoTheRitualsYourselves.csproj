@@ -67,10 +67,11 @@
     <Compile Include="Lister\RitualLister.cs" />
     <Compile Include="ExtraData\RitualExtraData.cs" />
     <Compile Include="Lister\Group\IdeoRitualGroup.cs" />
+    <Compile Include="Lister\Rituals\AbilityRitual.cs" />
     <Compile Include="Lister\Rituals\ManualIdRitual.cs" />
-    <Compile Include="Lister\Rituals\Ritual.cs" />
     <Compile Include="Lister\Group\RitualGroup.cs" />
     <Compile Include="Lister\GroupLister\RitualGroupLister.cs" />
+    <Compile Include="Lister\Rituals\Ritual.cs" />
     <Compile Include="RitualPolicies\RitualPolicy_Editable.cs" />
     <Compile Include="Windows\Dialog_RenameRitualPolicy.cs" />
     <Compile Include="Windows\Dialog_EditRitualPolicy.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="RitualPolicies\RitualPolicy_Always.cs" />
     <Compile Include="RitualPolicies\RitualPolicy.cs" />
     <Compile Include="Core\RitualStarter.cs" />
+    <Compile Include="Windows\Dialog_AssignRole.cs" />
     <Compile Include="WorldComponents\WorldComponent_RitualPolicy.cs" />
     <Compile Include="WorldComponents\WorldComponent_AutoRituals.cs" />
   </ItemGroup>

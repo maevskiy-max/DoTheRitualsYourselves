@@ -93,7 +93,7 @@ namespace DoTheRitualsYourselves.RitualPolicies
             Scribe_Values.Look(ref allowOtherIdeo, "DoTheRitualsYourselves.AllowOtherIdeo", true);
         }
 
-        public virtual bool IsCanJoin(Precept_Ritual ritual, Thing spot, Pawn pawn, bool voluntary = true, bool allowOtherIdeos = true)
+        public virtual bool IsCanJoin(Precept_Ritual ritual, TargetInfo targetInfo, Pawn pawn, bool voluntary = true, bool allowOtherIdeos = true)
         {
             if (pawn.GetLord() != null)
                 return false;
@@ -117,9 +117,9 @@ namespace DoTheRitualsYourselves.RitualPolicies
                 return false;
             if (pawn.Ideo != ritual.ideo && !allowOtherIdeo)
                 return false;
-            if (spot != null && respectAllowedArea && pawn.playerSettings != null
+            if (targetInfo != null && targetInfo.IsValid && respectAllowedArea && pawn.playerSettings != null
                 && pawn.playerSettings.EffectiveAreaRestrictionInPawnCurrentMap != null
-                && !pawn.playerSettings.EffectiveAreaRestrictionInPawnCurrentMap[spot.Position])
+                && !pawn.playerSettings.EffectiveAreaRestrictionInPawnCurrentMap[targetInfo.Thing.Position])
                 return false;
 
             return !ritual.ritualOnlyForIdeoMembers || ritual.def.allowSpectatorsFromOtherIdeos || pawn.Ideo == ritual.ideo || !voluntary || allowOtherIdeos || pawn.IsPrisonerOfColony || pawn.RaceProps.Animal;
