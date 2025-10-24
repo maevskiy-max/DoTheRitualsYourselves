@@ -12,7 +12,7 @@
     <DoTheRitualsYourselves.UI.RitualRole>Назначение Ролей</DoTheRitualsYourselves.UI.RitualRole>
     <DoTheRitualsYourselves.UI.RitualRole.Tip>Сначала укажите участников, которым будет назначена каждая роль. Если назначение невозможно, их можно заменить другими участниками.</DoTheRitualsYourselves.UI.RitualRole.Tip>
     <DoTheRitualsYourselves.UI.Start>Начать</DoTheRitualsYourselves.UI.Start>
-    <DoTheRitualsYourselves.UI.CannotStart>Невозможно Начать</DoTheRitualsYourselves.UI.CannotStart>
+    <DoTheRitualsYourselves.UI.CannotStart>Начать Нельзя</DoTheRitualsYourselves.UI.CannotStart>
     <DoTheRitualsYourselves.UI.Cancel>Прервать</DoTheRitualsYourselves.UI.Cancel>
     <DoTheRitualsYourselves.UI.Cancel.Tip>Немедленно прервать текущий ритуал.</DoTheRitualsYourselves.UI.Cancel.Tip>
     <DoTheRitualsYourselves.UI.StartTooltip>Начните ритуал немедленно, тщательно подготовившись.</DoTheRitualsYourselves.UI.StartTooltip>
@@ -63,7 +63,7 @@
     <DoTheRitualsYourselves.UI.DeleteConfirm>Вы уверены, что хотите удалить эту ритуальную политику?</DoTheRitualsYourselves.UI.DeleteConfirm>
 
     <DoTheRitualsYourselves.UI.AssignRole.Label>Назначить Роли</DoTheRitualsYourselves.UI.AssignRole.Label>
-    <DoTheRitualsYourselves.UI.AssignRole.Desc>Установите приоритет участников для каждой роли сверху вниз. [Нет роли] не будет назначен другим ролям, а [Не назначено] заполнит пустые роли и будет заполнять наблюдателей.</DoTheRitualsYourselves.UI.AssignRole.Desc>
+    <DoTheRitualsYourselves.UI.AssignRole.Desc>Установите приоритет участников для каждой роли сверху вниз. [Нет Роли] не будет назначен другим ролям, а [Неназначено] заполнит пустые роли и будет заполнять наблюдателей.</DoTheRitualsYourselves.UI.AssignRole.Desc>
     <DoTheRitualsYourselves.UI.AssignRole.Unassigned>Неназначенно</DoTheRitualsYourselves.UI.AssignRole.Unassigned>
     <DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>Это список участников, которым не назначены приоритетные роли. Если назначение приоритетных ролей не удастся, участники будут выбраны из списка неназначенных ролей.</DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>
     <DoTheRitualsYourselves.UI.AssignRole.None>Нет Роли</DoTheRitualsYourselves.UI.AssignRole.None>
