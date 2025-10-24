@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <DoTheRitualsYourselves.Message.DeleteRitualPolicy>Удалена ритуальная политика {0}.</DoTheRitualsYourselves.Message.DeleteRitualPolicy>
+    <DoTheRitualsYourselves.Message.NewRitualPolicy>Создана новая ритуальная политика.</DoTheRitualsYourselves.Message.NewRitualPolicy>
+    <DoTheRitualsYourselves.Message.RenameRitualPolicy>Ритуальная политика переименована в {0}.</DoTheRitualsYourselves.Message.RenameRitualPolicy>
+
+    <DoTheRitualsYourselves.Message.CantStart>Невозможно начать ритуал.</DoTheRitualsYourselves.Message.CantStart>
+</LanguageData>

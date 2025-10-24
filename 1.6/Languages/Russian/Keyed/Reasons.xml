@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+    <DoTheRitualsYourselves.Reason.RitualNoObligation>Условия для начала ритуала не выполнены.</DoTheRitualsYourselves.Reason.RitualNoObligation>
+    <DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>Нет подходящего места для начала ритуала, или не выполнены условия для начала ритуала.</DoTheRitualsYourselves.Reason.RitualNoSpotOrObligation>
+    <DoTheRitualsYourselves.Reason.WrongTime>Это не входит во временной диапазон, указанный в ритуальной политике.</DoTheRitualsYourselves.Reason.WrongTime>
+    <DoTheRitualsYourselves.Reason.WrongMood>Среднестатистическое настроение не соответствует требованиям ритуальной политики.</DoTheRitualsYourselves.Reason.WrongMood>
+    <DoTheRitualsYourselves.Reason.RepeatPenaltyActive>Ритуал был проведен недавно.</DoTheRitualsYourselves.Reason.RepeatPenaltyActive>
+    <DoTheRitualsYourselves.Reason.Danger>Присутствует опасность, поэтому ритуал не может начаться.</DoTheRitualsYourselves.Reason.Danger>
+    <DoTheRitualsYourselves.Reason.Nobody>Никто не может принять участие в ритуале.</DoTheRitualsYourselves.Reason.Nobody>
+    <DoTheRitualsYourselves.Reason.CantUnknown>Ритуал не может быть начат по неизвестной причине.</DoTheRitualsYourselves.Reason.CantUnknown>
+</LanguageData>
