@@ -3,7 +3,7 @@
     <DoTheRitualsYourselves.UI.Ideo.Tip>Настройте ритуалы для конкретной идеологии. Будут показаны только ритуалы, доступные в колонии.</DoTheRitualsYourselves.UI.Ideo.Tip>
     <DoTheRitualsYourselves.UI.StartNow>Начать сейчас</DoTheRitualsYourselves.UI.StartNow>
     <DoTheRitualsYourselves.UI.StartNow.Tip>Начинает ритуал немедленно. Игнорирует правила ритуала, за исключением требований к участникам.</DoTheRitualsYourselves.UI.StartNow.Tip>
-    <DoTheRitualsYourselves.UI.AutoStart>Автоматический запуск</DoTheRitualsYourselves.UI.AutoStart>
+    <DoTheRitualsYourselves.UI.AutoStart>Авто. запуск</DoTheRitualsYourselves.UI.AutoStart>
     <DoTheRitualsYourselves.UI.AutoStart.Tip>Колонисты начнут ритуал в соответствии со своей политикой.</DoTheRitualsYourselves.UI.AutoStart.Tip>
     <DoTheRitualsYourselves.UI.RitualPolicy>Политика Ритуала</DoTheRitualsYourselves.UI.RitualPolicy>
     <DoTheRitualsYourselves.UI.RitualPolicy.Tip>Настройте участников и условия начала ритуала.</DoTheRitualsYourselves.UI.RitualPolicy.Tip>
@@ -12,7 +12,7 @@
     <DoTheRitualsYourselves.UI.RitualRole>Назначение Ролей</DoTheRitualsYourselves.UI.RitualRole>
     <DoTheRitualsYourselves.UI.RitualRole.Tip>Сначала укажите участников, которым будет назначена каждая роль. Если назначение невозможно, их можно заменить другими участниками.</DoTheRitualsYourselves.UI.RitualRole.Tip>
     <DoTheRitualsYourselves.UI.Start>Начать</DoTheRitualsYourselves.UI.Start>
-    <DoTheRitualsYourselves.UI.CannotStart>Начать Нельзя</DoTheRitualsYourselves.UI.CannotStart>
+    <DoTheRitualsYourselves.UI.CannotStart>Невозможно</DoTheRitualsYourselves.UI.CannotStart>
     <DoTheRitualsYourselves.UI.Cancel>Прервать</DoTheRitualsYourselves.UI.Cancel>
     <DoTheRitualsYourselves.UI.Cancel.Tip>Немедленно прервать текущий ритуал.</DoTheRitualsYourselves.UI.Cancel.Tip>
     <DoTheRitualsYourselves.UI.StartTooltip>Начните ритуал немедленно, тщательно подготовившись.</DoTheRitualsYourselves.UI.StartTooltip>
@@ -43,7 +43,7 @@
     <DoTheRitualsYourselves.UI.Policy.PawnHealth.Tip>Установить требуемое состояние здоровья участников, имеющих право на ритуал.</DoTheRitualsYourselves.UI.Policy.PawnHealth.Tip>
     <DoTheRitualsYourselves.UI.Policy.PawnMood>Настроение Участников</DoTheRitualsYourselves.UI.Policy.PawnMood>
     <DoTheRitualsYourselves.UI.Policy.PawnMood.Tip>Установите требуемый уровень настроения участников, имеющих право на ритуал.</DoTheRitualsYourselves.UI.Policy.PawnMood.Tip>
-    <DoTheRitualsYourselves.UI.Policy.ExceptRestring>Exclude Resting</DoTheRitualsYourselves.UI.Policy.ExceptRestring>
+    <DoTheRitualsYourselves.UI.Policy.ExceptRestring>Исключить Отдыхающих</DoTheRitualsYourselves.UI.Policy.ExceptRestring>
     <DoTheRitualsYourselves.UI.Policy.ExceptRestring.Tip>Если включено, из ритуала исключаются пешки, отдыхающие в данный момент.</DoTheRitualsYourselves.UI.Policy.ExceptRestring.Tip>
     <DoTheRitualsYourselves.UI.Policy.RespectAllowedArea>Разрешенная Зона</DoTheRitualsYourselves.UI.Policy.RespectAllowedArea>
     <DoTheRitualsYourselves.UI.Policy.RespectAllowedArea.Tip>Если эта опция включена, колонисты будут присоединяться к ритуалам только в том случае, если место проведения ритуала находится в пределах разрешенной для них зоны.</DoTheRitualsYourselves.UI.Policy.RespectAllowedArea.Tip>
@@ -60,11 +60,11 @@
     <DoTheRitualsYourselves.UI.Rename>Переименовать</DoTheRitualsYourselves.UI.Rename>
     <DoTheRitualsYourselves.UI.Delete>Удалить</DoTheRitualsYourselves.UI.Delete>
     <DoTheRitualsYourselves.UI.Add>Добавить</DoTheRitualsYourselves.UI.Add>
-    <DoTheRitualsYourselves.UI.DeleteConfirm>Вы уверены, что хотите удалить эту ритуальную политику?</DoTheRitualsYourselves.UI.DeleteConfirm>
+    <DoTheRitualsYourselves.UI.DeleteConfirm>Вы уверены, что хотите удалить эту политику?</DoTheRitualsYourselves.UI.DeleteConfirm>
 
     <DoTheRitualsYourselves.UI.AssignRole.Label>Назначить Роли</DoTheRitualsYourselves.UI.AssignRole.Label>
-    <DoTheRitualsYourselves.UI.AssignRole.Desc>Установите приоритет участников для каждой роли сверху вниз. [Нет Роли] не будет назначен другим ролям, а [Неназначено] заполнит пустые роли и будет заполнять наблюдателей.</DoTheRitualsYourselves.UI.AssignRole.Desc>
-    <DoTheRitualsYourselves.UI.AssignRole.Unassigned>Неназначенно</DoTheRitualsYourselves.UI.AssignRole.Unassigned>
+    <DoTheRitualsYourselves.UI.AssignRole.Desc>Установите приоритет участников для каждой роли сверху вниз. [Без Роли] не будет назначен другим ролям, а [Без Назначения] заполнит пустые роли и будет заполнять наблюдателей.</DoTheRitualsYourselves.UI.AssignRole.Desc>
+    <DoTheRitualsYourselves.UI.AssignRole.Unassigned>Без Назначения</DoTheRitualsYourselves.UI.AssignRole.Unassigned>
     <DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>Это список участников, которым не назначены приоритетные роли. Если назначение приоритетных ролей не удастся, участники будут выбраны из списка неназначенных ролей.</DoTheRitualsYourselves.UI.AssignRole.Unassigned.Tip>
-    <DoTheRitualsYourselves.UI.AssignRole.None>Нет Роли</DoTheRitualsYourselves.UI.AssignRole.None>
+    <DoTheRitualsYourselves.UI.AssignRole.None>Без Роли</DoTheRitualsYourselves.UI.AssignRole.None>
 </LanguageData>
